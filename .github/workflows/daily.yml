@@ -1,0 +1,29 @@
+name: Daily AI Intel
+
+on:
+  schedule:
+    - cron: '0 1 * * *'   # 每天北京时间9点
+  workflow_dispatch:
+
+jobs:
+  run-daily:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 拉取仓库
+        uses: actions/checkout@v4
+
+      - name: 安装Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 运行情报系统
+        run: python src/daily_run.py
+
+      - name: 推送到微信（Server酱）
+        run: |
+          curl "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=AI情报日报&desp=$(cat daily_report.md)"
