@@ -13,21 +13,18 @@ def run():
 
     vids = fetch_all(channels)
     items = []
-    for v in vids:
-        score = total_score(v)
-        cats = classify(v.get("title","") + " " + v.get("description",""))
-        items.append({
-            "id": v.get("id"),
-            "title": v.get("title"),
-            "description": v.get("description"),
-            "channel": v.get("channel"),
-            "published_at": v.get("published_at"),
-            "views": v.get("views"),
-            "likes": v.get("likes"),
-            "comments": v.get("comments"),
-            "score": score,
-            "categories": cats
-        })
+    # 在 daily_run.py 的循环里改这一段
+for v in vids:
+    raw_content = v.get("title","") + " " + v.get("description","")
+    # 调用我们改好的 AI 总结函数
+    ai_summary = classify(raw_content) 
+    
+    items.append({
+        "title": ai_summary, # 这里直接用 AI 总结后的中文
+        "channel": v.get("channel"),
+        "score": total_score(v),
+        "url": f"https://www.youtube.com/watch?v={v.get('id')}"
+    })
 
     sections = build_sections(items)
     md = render_markdown(sections)
