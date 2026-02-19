@@ -11,7 +11,7 @@ def iso_24h_ago():
     t = datetime.now(timezone.utc) - timedelta(hours=24)
     return t.isoformat()
 
-def fetch_videos_for_query(query, max_results=8):
+def fetch_videos_for_query(query, max_results=50):
     params = {
         "key": YOUTUBE_KEY,
         "part": "snippet",
