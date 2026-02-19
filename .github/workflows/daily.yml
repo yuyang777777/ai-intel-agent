@@ -2,30 +2,31 @@ name: AI YouTube Daily
 
 on:
   schedule:
-    - cron: "0 1 * * *" # UTC 01:00 -> 北京时间 09:00
-  workflow_dispatch:
+    # 每天北京时间 09:00 (对应 UTC 01:00)
+    - cron: '0 1 * * *'
+  workflow_dispatch: # 极其重要：这让你可以手动点一下按钮立刻测试！
 
 jobs:
-  run:
+  run-daily:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: 设置 Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install deps
+      - name: 安装依赖
         run: |
-          python -m venv .venv
-          source .venv/bin/activate
           pip install -r requirements.txt
 
-      - name: Generate and push to WeChat
+      - name: 运行 AI 情报系统
         env:
+          # 这里的名字必须和你在 GitHub Settings 里填的一模一样
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           SCTKEY: ${{ secrets.SCTKEY }}
         run: |
-          source .venv/bin/activate
           python src/daily_run.py
