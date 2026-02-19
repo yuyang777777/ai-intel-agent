@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 
 def build_sections(items):
