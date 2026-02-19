@@ -28,8 +28,8 @@ def render_markdown(sections):
             continue
         
         md += f"### {sec}\n"
-        # 每个板块只取评分最高的前 5 条
-        sorted_items = sorted(items, key=lambda x: x.get("score", 0), reverse=True)[:5]
+        # 每个板块只取评分最高的前 10 条
+        sorted_items = sorted(items, key=lambda x: x.get("score", 0), reverse=True)[:10]
         
         for it in sorted_items:
             # 获取视频 ID 拼接链接
